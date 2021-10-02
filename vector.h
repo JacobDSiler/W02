@@ -1,4 +1,4 @@
-/***********************************************************************
+﻿/***********************************************************************
  * Header:
  *    VECTOR
  * Summary:
@@ -217,11 +217,32 @@ namespace custom
      ****************************************/
     vector::vector(const vector& rhs)
     {
-          *this = rhs;
-/*        numElements = rhs.numElements;
-        numCapacity = rhs.numCapacity;
-        this->data = rhs.data;
-  */      
+        if (!rhs.empty())
+        {
+            data = alloc.allocate(rhs.numCapacity);
+            numCapacity = rhs.numCapacity;
+            numElements = rhs.numElements;
+            for (int i = 0; i < numElements; i++)
+                alloc.construct(&data[i], rhs.data[i]);
+        }
+        else
+        {
+            data = nullptr;
+            numElements = 0;
+            numCapacity = 0;
+        }
+
+        /*IF NOT rhs.empty()
+ data  alloc.allocate(rhs.numElements)*
+ numCapacity  rhs.numElements*
+ numElements  rhs.numElements*
+ FOR 1  0 … numElements
+ alloc.construct(data[i], rhs.data[i])
+ ELSE
+ data  NULL
+ numElements  0
+ numCapacity  0
+*/
     }
 
     /*****************************************
@@ -249,6 +270,11 @@ namespace custom
      ****************************************/
     vector :: ~vector()
     {
+        /*for (int i = 0; i < numElements; i++)
+        {
+            delete(data[i]);
+            data[i] = nullptr;
+        }*/
 
     }
 
